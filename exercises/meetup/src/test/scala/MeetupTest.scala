@@ -4,6 +4,17 @@ import org.scalatest.{Matchers, FunSuite}
 /** @version 1.0.0 */
 class MeetupTest extends FunSuite with Matchers {
 
+  // NB:
+  // You might want to use static type checking
+  // to prevent runtime DateTimeExceptions for illegal months and days.
+  // Currently passed as Int but could be done as enums with ordinals.
+  test("illegal values") {
+    pending
+    val illegalMonth = 30
+    val illegalDay = 8
+    Meetup(illegalMonth, 2013).day(illegalDay, Schedule.Teenth)
+  }
+
   test("monteenth of May 2013") {
     Meetup(5, 2013).day(Meetup.Mon, Schedule.Teenth) should be(
       LocalDate.of(2013, 5, 13))
