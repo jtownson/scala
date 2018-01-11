@@ -10,3 +10,4 @@ libraryDependencies ++= Seq(
 
 libraryDependencies += "org.scalaz" %% "scalaz-core" % "7.2.6"
 
+libraryDependencies += "com.softwaremill.quicklens" %% "quicklens" % "1.4.11"

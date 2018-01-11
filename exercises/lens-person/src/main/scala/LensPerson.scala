@@ -1,5 +1,7 @@
 import java.time.LocalDate
 
+import com.softwaremill.quicklens._
+
 object LensPerson {
   case class Person(_name: Name, _born: Born, _address: Address)
 
@@ -15,16 +17,21 @@ object LensPerson {
 
   // Valid values of Gregorian are those for which 'java.time.LocalDate.of'
   // returns a valid LocalDate.
-  case class Gregorian(_year: Int, _month: Int, _dayOfMonth: Int)
+  //case class Gregorian(_year: Int, _month: Int, _dayOfMonth: Int)
+
+  private val updateMonthTo: Int => EpochDay => EpochDay = month => epochDay =>
+    LocalDate.ofEpochDay(epochDay).withMonth(month).toEpochDay
 
   // Implement these.
+  val bornStreet: Born => String = _._bornAt._street
 
-  val bornStreet: Born => String = ???
+  val setCurrentStreet: String => Person => Person =
+    street => person => modify(person)(_._address._street).setTo(street)
 
-  val setCurrentStreet: String => Person => Person = ???
-
-  val setBirthMonth: Int => Person => Person = ???
+  val setBirthMonth: Int => Person => Person =
+    month => person => modify(person)(_._born._bornOn).using(updateMonthTo(month))
 
   // Transform both birth and current street names.
-  val renameStreets: (String => String) => Person => Person = ???
+  val renameStreets: (String => String) => Person => Person =
+    fStr => person => modifyAll(person)(_._born._bornAt._street, _._address._street).using(fStr)
 }
